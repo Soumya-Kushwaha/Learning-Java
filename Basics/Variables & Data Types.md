@@ -123,28 +123,6 @@ list = new ArrayList<>(); // ✗
 
 ---
 
-## Type Casting
-
-### Widening
-Implicit conversion to a compatible larger type.
-
-```java
-int x = 10;
-long y = x;
-```
-
-`byte → short → int → long → float → double`
-
-### Narrowing
-Explicit conversion; possible data loss.
-
-```java
-double x = 10.5;
-int y = (int) x; // 10
-```
-
----
-
 ## `var`
 
 Local variable type inference; type is determined at **compile time**.
@@ -158,3 +136,52 @@ var name = "Java";    // String
 - Must be initialized
 - Not dynamically typed
 - Cannot be `null` without a target type
+
+## Type Conversion & Type Promotion
+
+### 1. Widening Conversion (Implicit)
+- Automatically converts a type to a compatible wider type.
+- Generally avoids loss of range, but may lose precision (`long` → `float`).
+
+```java
+int x = 10;
+double y = x;
+```
+
+### 2. Narrowing Conversion (Explicit)
+- Requires an explicit cast when converting to an incompatible or narrower type.
+- May cause overflow, precision loss, or truncation.
+
+```java
+double x = 10.8;
+int y = (int) x; // 10
+```
+
+### 3. Truncating Conversion
+- Floating-point to integer conversion discards the fractional part (toward zero).
+- `NaN` converts to `0`; out-of-range floating-point values saturate to the target integer's minimum/maximum.
+
+```java
+(int)  3.9  //  3
+(int) -3.9  // -3
+```
+
+### 4. Boolean Conversion
+- `boolean` cannot be cast to or from any other primitive type in Java.
+
+### 5. Automatic Type Promotion
+- In arithmetic operations, `byte`, `short`, and `char` operands are promoted to `int` (or a wider type if applicable).
+- Binary numeric promotion generally promotes operands to the widest applicable type: `double` → `float` → `long` → `int`.
+- The result type depends on the operands after promotion.
+
+```java
+byte a = 10, b = 20;
+// byte c = a + b;       // Compilation error
+int c = a + b;           // Valid: operands promoted to int
+
+int x = 10;
+double y = 2.5;
+double result = x + y;   // int promoted to double
+```
+
+**Gotcha:** Assignment does not automatically narrow a result back to the original type. Compound assignment (`+=`, `-=`, etc.) implicitly includes a cast to the left-hand type.
